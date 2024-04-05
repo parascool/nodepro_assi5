@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="admin.css">
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Email</th>
+        <th>Ordered Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% orders.forEach(order => { %>
+        <tr>
+          <td><%= order.name %></td>
+          <td><%= order.address %></td>
+          <td><%= order.email %></td>
+          <td><%= order.orderedDate.toDateString() %></td>
+          <td><%= order.status %></td>
+          <td><button onclick="sendEmail('<%= order._id %>')">Send Email</button></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+  <script>
+    function sendEmail(orderId) {
+      fetch(`/sendEmail/${orderId}`, { method: 'POST' })
+        .then(response => {
+          if (response.ok) {
+            alert('Email sent successfully.');
+          } else {
+            throw new Error('Failed to send email.');
+          }
+        })
+        .catch(error => {
+          console.error('Error sending email:', error);
+          alert('An error occurred while sending the email.');
+        });
+    }
+  </script>
+</body>
+</html>
